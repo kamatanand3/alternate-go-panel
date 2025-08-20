@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"altpanel/config"
-	"altpanel/controllers"
 	"altpanel/repositories"
+	"altpanel/routes"
 )
 
 func main() {
@@ -20,15 +20,8 @@ func main() {
 
 	// Router
 	r := gin.Default()
-
-	// Routes
-	r.POST("/users", controllers.CreateUser)
-	r.GET("/users", controllers.GetAllUsers)
-	r.GET("/users/:id", controllers.GetUserByID)
-	r.PUT("/users/:id", controllers.UpdateUser)
-	r.DELETE("/users/:id", controllers.DeleteUser)
-
-	r.GET("/configs", controllers.GetAllConfig)
+	// Register routes (with middleware inside)
+	routes.RegisterRoutes(r)
 
 	// Get APP_PORT from env
 	port := os.Getenv("APP_PORT")
