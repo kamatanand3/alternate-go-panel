@@ -7,7 +7,6 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	// Global Middlewares
 	r.Use(gin.Recovery())    // handles panic
 	r.Use(middleware.ApiHandler()) // custom header validation middleware
 	r.Use(middleware.Logger()) // log request + response
