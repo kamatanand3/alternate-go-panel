@@ -9,6 +9,7 @@ import (
 
 
 func GetAllConfig() ([]models.Config, error) {
+	repositories.InitConfigRepository()
 	configs, err := repositories.GetAllConfig()
 	// fmt.Printf("Repo response: %+v\n", configs)
 	if err != nil {

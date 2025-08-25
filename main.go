@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"altpanel/config"
-	"altpanel/repositories"
+	// "altpanel/repositories"
 	"altpanel/routes"
 )
 
@@ -14,9 +14,7 @@ func main() {
 	// Connect MongoDB
 	config.ConnectDB()
 
-	// Init repo collections
-	// repositories.InitUserRepository()
-	repositories.InitConfigRepository()
+	
 
 	// Router
 	r := gin.Default()
