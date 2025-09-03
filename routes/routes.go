@@ -7,19 +7,18 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	// Global Middlewares
 	r.Use(gin.Recovery())    // handles panic
 	r.Use(middleware.ApiHandler()) // custom header validation middleware
-	r.Use(middleware.Logger()) // log request + response
+	// r.Use(middleware.Logger()) // log request + response
 
 
 	v1 := r.Group("/api/v1")
 	{
-		// v1.POST("/users", controllers.CreateUser)
-		// v1.GET("/users", controllers.GetAllUsers)
-		// v1.GET("/users/:id", controllers.GetUserByID)
-		// v1.PUT("/users/:id", controllers.UpdateUser)
-		// v1.DELETE("/users/:id", controllers.DeleteUser)
+		v1.GET("/users", controllers.GetAllUsers)
 		v1.GET("/configs", controllers.GetAllConfig)
-	}	
+		v1.POST("/digiscore", controllers.GetDigiScore)
+		// bannerCtrl := banner.NewController()
+
+		// v1.POST("/digiscore", bannerCtrl.GetDigiScore)
+	}
 }
