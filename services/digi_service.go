@@ -14,9 +14,9 @@ import (
 )
 
 type DigiScoreRequest struct {
-	UserRefNumber     string `json:"user_reference_number" binding:"required"`
+	UserRefNumber     string `json:"user_reference_number" validate:"required"`
 	Delay             int    `json:"delay"`
-	EmploymentType    string `json:"employment_type" binding:"required"`
+	EmploymentType    string `json:"employment_type" validate:"required"`
 	CustomerFullName  string `json:"customer_full_name"`
 	CustomerPanNumber string `json:"customer_pan_number"`
 	Imei              string `json:"imei"`

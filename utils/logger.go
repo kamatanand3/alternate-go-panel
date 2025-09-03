@@ -3,13 +3,14 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // LogLevel represents different log levels
@@ -39,7 +40,6 @@ const (
 	STDERR     LogChannel = "stderr"
 )
 
-
 var (
 	// Default log directory
 	logDir   = "logs"
@@ -64,12 +64,8 @@ func init() {
 }
 
 func GetRequestIDFromContext(c *gin.Context) string {
-	if v, exists := c.Get("request_id"); exists {
-		if s, ok := v.(string); ok {
-			return s
-		}
-	}
-	return "" // or generate a fallback ID if needed
+	requestID := c.GetHeader("X-Request-ID")
+	return requestID // or generate a fallback ID if needed
 }
 
 // addLog is the core logging function

@@ -2,14 +2,15 @@ package utils
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
 type ResponseCode struct {
 	RequestID    string      `json:"request_id"`
 	Success      bool        `json:"success"`
-	ResponseCode int         `json:"response_code"`
-	Message      string      `json:"message"`
+	ResponseCode string      `json:"error_code"`
+	Message      string      `json:"info"`
 	Data         interface{} `json:"data,omitempty"`
 	HTTPCode     int         `json:"-"`
 }
@@ -20,58 +21,23 @@ func GetResponseCode(c *gin.Context, code int) ResponseCode {
 		1: {
 			RequestID:    GetRequestIDFromContext(c),
 			Success:      true,
-			ResponseCode: 0,
+			ResponseCode: "0",
 			Message:      "Success",
 			HTTPCode:     200,
 		},
 		2: {
 			RequestID:    GetRequestIDFromContext(c),
 			Success:      false,
-			ResponseCode: 0,
+			ResponseCode: "0",
 			Message:      "Success",
 			HTTPCode:     200,
 		},
-		101: {
+		4: {
 			RequestID:    GetRequestIDFromContext(c),
 			Success:      false,
-			ResponseCode: 101,
-			Message:      "Validation failed",
+			ResponseCode: "04",
+			Message:      "Invalid json",
 			HTTPCode:     400,
-		},
-		201: {
-			RequestID:    GetRequestIDFromContext(c),
-			Success:      false,
-			ResponseCode: 201,
-			Message:      "Invalid Key Id OR Key Secret",
-			HTTPCode:     401,
-		},
-		203: {
-			RequestID:    GetRequestIDFromContext(c),
-			Success:      false,
-			ResponseCode: 203,
-			Message:      "Validation failed",
-			HTTPCode:     401,
-		},
-		3: {
-			RequestID:    GetRequestIDFromContext(c),
-			Success:      false,
-			ResponseCode: 2,
-			Message:      "Not found",
-			HTTPCode:     404,
-		},
-		102: {
-			RequestID:    GetRequestIDFromContext(c),
-			Success:      false,
-			ResponseCode: 102,
-			Message:      "Internal server error",
-			HTTPCode:     500,
-		},
-		429: {
-			RequestID:    GetRequestIDFromContext(c),
-			Success:      false,
-			ResponseCode: 429,
-			Message:      "Too many request, please try after sometime",
-			HTTPCode:     429,
 		},
 	}
 
@@ -83,7 +49,7 @@ func GetResponseCode(c *gin.Context, code int) ResponseCode {
 	return ResponseCode{
 		RequestID:    GetRequestIDFromContext(c),
 		Success:      false,
-		ResponseCode: 999,
+		ResponseCode: "999",
 		Message:      "Unknown error",
 		HTTPCode:     500,
 	}
@@ -114,10 +80,10 @@ func SuccessResponse(c *gin.Context, data interface{}) {
 }
 
 // ErrorResponse sends an error response
-func ErrorResponse(c *gin.Context, code int, message string) {
+func ErrorResponse(c *gin.Context, code int, message ...string) {
 	response := GetResponseCode(c, code)
-	if message != "" {
-		response.Message = message
+	if len(message) > 0 && message[0] != "" {
+		response.Message = message[0]
 	}
 	Response(c, response)
 }
