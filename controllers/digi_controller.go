@@ -1,39 +1,24 @@
 package controllers
 
 import (
-	"net/http"
 	"altpanel/services"
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"altpanel/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetDigiScore(c *gin.Context) {
 	var req services.DigiScoreRequest
-	// Gin automatically validates with "binding:required"
-	if err := c.ShouldBindJSON(&req); err != nil {
-		if errs, ok := err.(validator.ValidationErrors); ok {
-			for _, fieldErr := range errs {
-				var msg string
-				switch fieldErr.Field() {
-				case "UserRefNumber":
-					msg = "User Reference Number is required"
-				case "EmploymentType":
-					msg = "Employment Type is required"
-				default:
-					msg = fieldErr.Error()
-				}
 
-				c.JSON(http.StatusBadRequest, gin.H{
-					"success":    false,
-					"error_code": "04",
-					"info":       "Validation Error: " + msg,
-				})
-				return
-			}
-		}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.ErrorResponse(c, 4)
+		return
 	}
 
+	if err := utils.Validate.Struct(req); err != nil {
+		utils.ErrorResponse(c, 4, utils.FormatValidationError(err))
+		return
+	}
 	// Call service
 	result, err := services.GetDigiScore(c, req)
 
@@ -46,5 +31,5 @@ func GetDigiScore(c *gin.Context) {
 	}
 	utils.SuccessResponse(c, responseData)
 	// c.JSON(http.StatusOK, resp)
-	
+
 }
