@@ -3,7 +3,6 @@ package services
 import (
 	"altpanel/repositories"
 	"context"
-	"fmt"
 
 	// "net/http"
 	// "time"
@@ -31,7 +30,6 @@ func GetDigiScore(c *gin.Context, req DigiScoreRequest) (bson.M, error) {
 	// ab JSON body se value aayegi
 	utils.AppLog(c, "INFO", "GetDigiScore", map[string]interface{}{"user_ref_num": req.UserRefNumber}, "DigiService", "GetDigiScore")
 
-	repositories.NewCustomerRepository()
 	ctx := context.TODO()
 	filter := bson.M{"user_reference_number": req.UserRefNumber}
 	projection := bson.M{
@@ -40,14 +38,6 @@ func GetDigiScore(c *gin.Context, req DigiScoreRequest) (bson.M, error) {
 		"last_name":             1,
 		"email":                 1,
 	}
-
-	customer, err := repositories.FindOne(ctx, filter, projection)
-	if err != nil {
-		return nil, err
-	}
-
-	// Debug print
-	fmt.Println("✅ Customer found123:", customer)
-
-	return customer, nil
+	customerRepo := repositories.NewCustomerRepository()
+	return customerRepo.FindOne(ctx, filter, projection)
 }

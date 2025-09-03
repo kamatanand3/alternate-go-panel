@@ -9,7 +9,6 @@ import (
 
 func GetDigiScore(c *gin.Context) {
 	var req services.DigiScoreRequest
-
 	if err := c.ShouldBindJSON(&req); err != nil {
 		utils.ErrorResponse(c, 4)
 		return
@@ -26,10 +25,7 @@ func GetDigiScore(c *gin.Context) {
 		utils.HandleAppError(c, err)
 		return
 	}
-	responseData := gin.H{
-		"encrypted_string": result,
-	}
-	utils.SuccessResponse(c, responseData)
-	// c.JSON(http.StatusOK, resp)
+
+	utils.SuccessResponse(c, result)
 
 }

@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	"altpanel/config"
+
+	"github.com/gin-gonic/gin"
+
 	// "altpanel/repositories"
 	"altpanel/routes"
 )
@@ -13,8 +15,6 @@ import (
 func main() {
 	// Connect MongoDB
 	config.ConnectDB()
-
-	
 
 	// Router
 	r := gin.Default()
