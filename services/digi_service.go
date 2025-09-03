@@ -5,15 +5,35 @@ import (
 	"context"
 	"fmt"
 
+	// "net/http"
+	// "time"
+	"altpanel/utils"
+
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetDigiScore() (bson.M, error) {
-	// Always pass context
+type DigiScoreRequest struct {
+	UserRefNumber     string `json:"user_reference_number" binding:"required"`
+	Delay             int    `json:"delay"`
+	EmploymentType    string `json:"employment_type" binding:"required"`
+	CustomerFullName  string `json:"customer_full_name"`
+	CustomerPanNumber string `json:"customer_pan_number"`
+	Imei              string `json:"imei"`
+	AndroidID         string `json:"android_id"`
+	AdvertisingID     string `json:"advertising_id"`
+	GlobalDeviceID    string `json:"global_device_id"`
+	RequestSource     string `json:"request_source"`
+	TransactionRefNo  string `json:"transaction_reference_number"`
+}
+
+func GetDigiScore(c *gin.Context, req DigiScoreRequest) (bson.M, error) {
+	// ab JSON body se value aayegi
+	utils.AppLog(c, "INFO", "GetDigiScore", map[string]interface{}{"user_ref_num": req.UserRefNumber}, "DigiService", "GetDigiScore")
+
 	repositories.NewCustomerRepository()
 	ctx := context.TODO()
-
-	filter := bson.M{"user_reference_number": "USER9153168152498563"}
+	filter := bson.M{"user_reference_number": req.UserRefNumber}
 	projection := bson.M{
 		"user_reference_number": 1,
 		"first_name":            1,
@@ -27,7 +47,7 @@ func GetDigiScore() (bson.M, error) {
 	}
 
 	// Debug print
-	fmt.Println("✅ Customer found:", customer)
+	fmt.Println("✅ Customer found123:", customer)
 
 	return customer, nil
 }
