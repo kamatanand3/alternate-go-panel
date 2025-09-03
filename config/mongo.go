@@ -23,7 +23,6 @@ func ConnectDB() {
 
 	mongoURI := os.Getenv("MONGO_URI")
 	dbName := os.Getenv("MONGO_DB")
-
 	if mongoURI == "" || dbName == "" {
 		log.Fatal("❌ MONGO_URI or MONGO_DB is not set in .env")
 	}
@@ -40,11 +39,13 @@ func ConnectDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	DB = client.Database(dbName)
 	fmt.Println("✅ MongoDB connected to", dbName)
 }
 
 func GetCollection(name string) *mongo.Collection {
+	if DB == nil {
+		panic("MongoDB database is not initialized. Call ConnectDB() first.")
+	}
 	return DB.Collection(name)
 }
